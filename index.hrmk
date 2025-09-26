@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Location Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #1a2a6c;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            color: #666;
+        }
+        
+        .location-info {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 1px dashed #eee;
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .info-icon {
+            font-size: 1.5rem;
+            margin-right: 15px;
+            min-width: 30px;
+        }
+        
+        .info-content {
+            flex: 1;
+        }
+        
+        .info-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #1a2a6c;
+        }
+        
+        .info-value {
+            font-size: 1.1rem;
+            word-break: break-word;
+        }
+        
+        .map-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .map-link {
+            display: inline-block;
+            padding: 8px 15px;
+            background: #1a2a6c;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            transition: all 0.3s;
+        }
+        
+        .map-link:hover {
+            background: #0d1a4a;
+            transform: translateY(-2px);
+        }
+        
+        .coordinates {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .coordinate {
+            background: #f5f5f5;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        button {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        #startTracking {
+            background: #4CAF50;
+            color: white;
+        }
+        
+        #stopTracking {
+            background: #f44336;
+            color: white;
+        }
+        
+        #refreshLocation {
+            background: #2196F3;
+            color: white;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            background: #e7f4e4;
+            color: #2e7d32;
+            border: 1px solid #4CAF50;
+        }
+        
+        .stopped {
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #f44336;
+        }
+        
+        .updating {
+            background: #e3f2fd;
+            color: #1565c0;
+            border: 1px solid #2196F3;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.7; }
+            100% { opacity: 1; }
+        }
+        
+        .accuracy-meter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 5px;
+        }
+        
+        .meter-bar {
+            height: 8px;
+            flex: 1;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .meter-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #f44336, #ff9800, #4CAF50);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .last-update {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .info-item {
+                flex-direction: column;
+            }
+            
+            .info-icon {
+                margin-bottom: 5px;
+            }
+            
+            .map-links {
+                flex-direction: column;
+            }
+            
+            .controls {
+                flex-direction: column;
+            }
+            
+            .coordinates {
+                flex-direction: column;
+                gap: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📍 LOKASI TERKINI 📍</h1>
+            <p class="subtitle">Lokasi terdeteksi otomatis oleh sistem - Update Real-Time</p>
+        </header>
+        
+        <div class="location-info">
+            <div class="info-item">
+                <div class="info-icon">🗺️</div>
+                <div class="info-content">
+                    <div class="info-label">Alamat</div>
+                    <div class="info-value" id="addressValue">Sedang mendeteksi lokasi...</div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">📡</div>
+                <div class="info-content">
+                    <div class="info-label">Akurasi</div>
+                    <div class="info-value" id="accuracyValue">-</div>
+                    <div class="accuracy-meter">
+                        <div class="meter-bar">
+                            <div class="meter-fill" id="accuracyFill"></div>
+                        </div>
+                        <span id="accuracyText">-</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🕐</div>
+                <div class="info-content">
+                    <div class="info-label">Waktu Update Terakhir</div>
+                    <div class="info-value" id="timeValue">-</div>
+                    <div class="last-update" id="updateCounter">Pembaruan: 0</div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">📍</div>
+                <div class="info-content">
+                    <div class="info-label">Koordinat</div>
+                    <div class="coordinates">
+                        <div class="coordinate">Lat: <span id="latValue">-</span></div>
+                        <div class="coordinate">Lng: <span id="lngValue">-</span></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🔗</div>
+                <div class="info-content">
+                    <div class="info-label">Google Maps</div>
+                    <div class="info-value">
+                        <a href="#" id="googleMapsLink" class="map-link" target="_blank">Buka di Google Maps</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="info-item">
+                <div class="info-icon">🌐</div>
+                <div class="info-content">
+                    <div class="info-label">OpenStreetMap</div>
+                    <div class="info-value">
+                        <a href="#" id="osmLink" class="map-link" target="_blank">Buka di OpenStreetMap</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="startTracking">Mulai Pelacakan Real-Time</button>
+            <button id="stopTracking">Hentikan Pelacakan</button>
+            <button id="refreshLocation">Perbarui Sekarang</button>
+        </div>
+        
+        <div class="status stopped" id="statusMessage">
+            Klik "Mulai Pelacakan Real-Time" untuk memulai update otomatis
+        </div>
+        
+        <footer>
+            <p>Real-Time Location Tracker &copy; 2023</p>
+            <p>Lokasi hanya disimpan di perangkat Anda dan tidak dikirim ke server mana pun</p>
+        </footer>
+    </div>
+
+    <script>
+        // Variabel global
+        let watchId = null;
+        let isTracking = false;
+        let updateCount = 0;
+        let lastPosition = null;
+        
+        // Format tanggal Indonesia
+        function formatIndonesianDate(date) {
+            const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+            const months = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+            
+            const dayName = days[date.getDay()];
+            const day = date.getDate();
+            const month = months[date.getMonth()];
+            const year = date.getFullYear();
+            const time = date.toLocaleTimeString('id-ID');
+            
+            return `${dayName}, ${day} ${month} ${year}, ${time}`;
+        }
+        
+        // Fungsi untuk mendapatkan nama daerah berdasarkan koordinat
+        async function getAddressFromCoords(lat, lng) {
+            try {
+                // Menggunakan OpenStreetMap Nominatim API untuk reverse geocoding
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=18&addressdetails=1`);
+                const data = await response.json();
+                
+                if (data && data.address) {
+                    const addr = data.address;
+                    // Format alamat seperti yang diminta
+                    const components = [];
+                    
+                    if (addr.road) components.push(addr.road);
+                    if (addr.suburb) components.push(addr.suburb);
+                    if (addr.city_district) components.push(addr.city_district);
+                    if (addr.city) components.push(addr.city);
+                    if (addr.state) components.push(addr.state);
+                    if (addr.postcode) components.push(addr.postcode);
+                    if (addr.country) components.push(addr.country);
+                    
+                    return components.join(', ');
+                }
+            } catch (error) {
+                console.error("Error mendapatkan alamat:", error);
+            }
+            
+            return "Alamat tidak dapat ditentukan";
+        }
+        
+        // Cek apakah posisi berubah signifikan
+        function isPositionSignificantlyChanged(newPos, oldPos) {
+            if (!oldPos) return true;
+            
+            // Jika akurasi meningkat signifikan, update
+            if (newPos.coords.accuracy < oldPos.coords.accuracy * 0.7) {
+                return true;
+            }
+            
+            // Hitung jarak antara posisi lama dan baru
+            const latDiff = newPos.coords.latitude - oldPos.coords.latitude;
+            const lngDiff = newPos.coords.longitude - oldPos.coords.longitude;
+            const distance = Math.sqrt(latDiff * latDiff + lngDiff * lngDiff) * 111319; // Konversi ke meter
+            
+            // Update jika bergerak lebih dari 10 meter atau akurasi meningkat
+            return distance > 10 || newPos.coords.accuracy < oldPos.coords.accuracy;
+        }
+        
+        // Update tampilan dengan informasi lokasi
+        async function updateLocationDisplay(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const accuracy = position.coords.accuracy;
+            
+            // Update counter
+            updateCount++;
+            document.getElementById('updateCounter').textContent = `Pembaruan: ${updateCount}`;
+            
+            // Update koordinat
+            document.getElementById('latValue').textContent = lat.toFixed(6);
+            document.getElementById('lngValue').textContent = lng.toFixed(6);
+            
+            // Update akurasi
+            document.getElementById('accuracyValue').textContent = `${accuracy.toFixed(1)} meter`;
+            document.getElementById('accuracyText').textContent = `${Math.max(0, 100 - (accuracy / 2)).toFixed(0)}%`;
+            
+            // Update accuracy meter
+            const accuracyPercent = Math.max(0, 100 - (accuracy / 2));
+            document.getElementById('accuracyFill').style.width = `${accuracyPercent}%`;
+            
+            // Update waktu
+            const now = new Date();
+            document.getElementById('timeValue').textContent = formatIndonesianDate(now);
+            
+            // Update link maps
+            document.getElementById('googleMapsLink').href = `https://maps.google.com/?q=${lat},${lng}`;
+            document.getElementById('osmLink').href = `https://www.openstreetmap.org/?mlat=${lat}&mlon=${lng}#map=17/${lat}/${lng}`;
+            
+            // Dapatkan alamat (hanya jika posisi berubah signifikan untuk mengurangi API calls)
+            if (!lastPosition || isPositionSignificantlyChanged(position, lastPosition)) {
+                updateStatus("Memperbarui alamat...", "updating");
+                const address = await getAddressFromCoords(lat, lng);
+                document.getElementById('addressValue').textContent = address;
+            }
+            
+            lastPosition = position;
+        }
+        
+        // Mulai pelacakan lokasi real-time
+        function startTracking() {
+            if (isTracking) return;
+            
+            if (!navigator.geolocation) {
+                alert("Geolocation tidak didukung oleh browser ini");
+                return;
+            }
+            
+            // Reset counter
+            updateCount = 0;
+            
+            // Update status
+            isTracking = true;
+            updateStatus("Memulai pelacakan real-time...", "updating");
+            
+            // Options untuk geolocation dengan akurasi tinggi
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 15000,
+                maximumAge: 0
+            };
+            
+            // Dapatkan posisi saat ini terlebih dahulu
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    await updateLocationDisplay(position);
+                    updateStatus("Pelacakan real-time aktif - Memperbarui otomatis", "tracking");
+                },
+                handleLocationError,
+                options
+            );
+            
+            // Mulai watchPosition untuk update real-time dengan interval lebih sering
+            watchId = navigator.geolocation.watchPosition(
+                async (position) => {
+                    await updateLocationDisplay(position);
+                    updateStatus("Pelacakan real-time aktif - Memperbarui otomatis", "tracking");
+                },
+                handleLocationError,
+                options
+            );
+        }
+        
+        // Hentikan pelacakan
+        function stopTracking() {
+            if (!isTracking) return;
+            
+            if (watchId !== null) {
+                navigator.geolocation.clearWatch(watchId);
+                watchId = null;
+            }
+            
+            isTracking = false;
+            updateStatus("Pelacakan dihentikan", "stopped");
+        }
+        
+        // Refresh lokasi sekali
+        function refreshLocation() {
+            if (!navigator.geolocation) {
+                alert("Geolocation tidak didukung oleh browser ini");
+                return;
+            }
+            
+            updateStatus("Memperbarui lokasi...", "updating");
+            
+            // Options untuk geolocation dengan akurasi tinggi
+            const options = {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            };
+            
+            // Dapatkan posisi saat ini
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    await updateLocationDisplay(position);
+                    if (isTracking) {
+                        updateStatus("Pelacakan real-time aktif - Memperbarui otomatis", "tracking");
+                    } else {
+                        updateStatus("Lokasi berhasil diperbarui", "stopped");
+                    }
+                },
+                handleLocationError,
+                options
+            );
+        }
+        
+        // Handle error geolocation
+        function handleLocationError(error) {
+            let errorMessage = "Error tidak diketahui";
+            
+            switch(error.code) {
+                case error.PERMISSION_DENIED:
+                    errorMessage = "Akses lokasi ditolak. Izinkan akses lokasi di browser Anda.";
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    errorMessage = "Informasi lokasi tidak tersedia.";
+                    break;
+                case error.TIMEOUT:
+                    errorMessage = "Permintaan lokasi timeout.";
+                    break;
+            }
+            
+            updateStatus(`Error: ${errorMessage}`, "stopped");
+            isTracking = false;
+        }
+        
+        // Update status message
+        function updateStatus(message, statusClass) {
+            const statusElement = document.getElementById('statusMessage');
+            statusElement.textContent = message;
+            statusElement.className = 'status ' + statusClass;
+        }
+        
+        // Event listeners saat halaman dimuat
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tambahkan event listeners untuk tombol
+            document.getElementById('startTracking').addEventListener('click', startTracking);
+            document.getElementById('stopTracking').addEventListener('click', stopTracking);
+            document.getElementById('refreshLocation').addEventListener('click', refreshLocation);
+            
+            // Coba dapatkan lokasi saat halaman dimuat
+            if (navigator.geolocation) {
+                updateStatus("Mendeteksi lokasi awal...", "updating");
+                
+                navigator.geolocation.getCurrentPosition(
+                    async (position) => {
+                        await updateLocationDisplay(position);
+                        updateStatus("Lokasi berhasil dideteksi. Klik 'Mulai Pelacakan Real-Time' untuk update otomatis", "stopped");
+                    },
+                    (error) => {
+                        // Jika izin ditolak
+                        updateStatus("Izin lokasi tidak diberikan. Izinkan akses lokasi untuk menggunakan aplikasi ini.", "stopped");
+                    },
+                    { enableHighAccuracy: true, timeout: 10000 }
+                );
+            } else {
+                updateStatus("Browser tidak mendukung geolocation", "stopped");
+            }
+        });
+    </script>
+</body>
+</html>
